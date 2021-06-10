@@ -17,8 +17,26 @@
 }
 
 #quote-box {
-  height: 200px;
-  width: auto;
+  height: auto;
+  width: 550px;
   background-color: white !important;
-  padding: 50px;
+  padding: 40px 50px;
+}
+
+#text {
+  
+}
+
+#author {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+#new-quote {
+  align-self: flex-end;
 }
