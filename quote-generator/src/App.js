@@ -1,10 +1,8 @@
 import './App.css';
 import {useState} from 'react'
 import { Button } from 'react-bootstrap'
-import {QUOTES as quote}  from './content'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTwitter} from '@fortawesome/free-brands-svg-icons'
-import {TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon } from 'react-share'
+import { QUOTES as quote }  from './content'
+import { TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon } from 'react-share'
 function App() {
   const [quoteID, setQuoteID] = useState(0);
   const handleClick = () => {
