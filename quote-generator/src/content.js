@@ -29,5 +29,71 @@ export const QUOTES =
         quote: "Not how long, but how well you have lived is the main thing",
         author: "Seneca",
         colour: "#f9c74f"
+    },
+    {
+        id: 5,
+        quote: "The way to get started is to quit talking and begin doing",
+        author: "Walt Disney",
+        colour: "#277da1"
+    },
+    {
+        id: 6,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#577590"
+    },
+    {
+        id: 7,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#4d908e"
+    },
+    {
+        id: 8,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#43aa8b"
+    },
+    {
+        id: 9,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#90be6d"
+    },
+    {
+        id: 10,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#f9c74f"
+    },
+    {
+        id: 11,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#9b2226"
+    },
+    {
+        id: 12,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#ae2012"
+    },
+    {
+        id: 13,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#bb3e03"
+    },
+    {
+        id: 14,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#ca6702"
+    },
+    {
+        id: 15,
+        quote: "Not how long, but how well you have lived is the main thing",
+        author: "Seneca",
+        colour: "#ee9b00"
     }
 ]

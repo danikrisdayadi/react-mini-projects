@@ -5,9 +5,8 @@ import {QUOTES as quote}  from './content'
 
 function App() {
   const [quoteID, setQuoteID] = useState(0);
-  const [quoteColour, setQuoteColour] = useState(quote[quoteID].colour)
   const handleClick = () => {
-    setQuoteID(Math.floor(Math.random() * 5));
+    setQuoteID(Math.floor(Math.random() * 16));
   }
   return (
    <div id="wrapper" style={{backgroundColor: quote[quoteID].colour}}>
