@@ -44,3 +44,7 @@
 #new-quote {
   align-self: flex-end;
 }
+
+#tweet-quote {
+  margin-right: 1vh;
+}
