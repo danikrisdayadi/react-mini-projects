@@ -21,6 +21,7 @@
 #quote-box {
   height: auto;
   width: 550px;
+  border-radius: 20px;
   background-color: white !important;
   padding: 40px 50px;
 }
@@ -37,6 +38,7 @@
 #footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 #new-quote {
