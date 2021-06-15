@@ -4,12 +4,15 @@ import './App.css';
 
 function App() {
   const [startTimer, setStartTimer] = useState(false)
+  const [buttonColour, setButtonColour] = useState({
+    colour: "blue",
+    state: "Start"
+  })
   const [hours, setHours] = useState(1)
   const [minutes, setMinutes] = useState(1)
   const [seconds, setSeconds ] = useState(0)
+  let secTimer;
   useEffect(() => {
-    console.log("Usereffect", seconds)
-    let secTimer;
     if(startTimer) {
       if(seconds > 0){
         secTimer = setTimeout(() => setSeconds(seconds - 1), 1000);
@@ -26,29 +29,41 @@ function App() {
           setHours(hours - 1)
         }, 1000);
       }
-    } else {
-      // setSeconds(seconds + 1);
-      console.log("Clear timeout", seconds, startTimer)
-      return null;
     }
     
   }, [startTimer, hours, minutes, seconds])
   const changeTime = (e) => {
-    if(e.target.name === "minute") {
-      setMinutes(minutes + 1)
+    switch(e.target.name) {
+      case "increaseMinute":
+        minutes >= 0 ? setMinutes(minutes + 1) : setMinutes(0)
+        break;
+      case "decreaseMinute":
+        minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)
+        break;
+      case "increaseHour":
+        hours >= 0 ? setHours(hours + 1) : setHours(0)
+        break;
+      case "decreaseHour":
+        hours > 0 ? setHours(hours - 1) : setHours(0)
+        break;
+      default:
+        break;
     }
-    
   }
-  const start = () => {
-    console.log("start is pressed")
+  const changeState = () => {
+    clearTimeout(secTimer);
     setStartTimer(!startTimer)
+    buttonColour.state === "Start" ? setButtonColour({colour: "red", state: "Pause"}) : setButtonColour({colour: "blue", state: "Start"});
   }
   return (
     <div className="App">
       <h1>Podomoro Timer</h1>
       <h2>{hours} : {minutes} : {seconds}</h2>
-      <Button onClick={changeTime} name="minute">Increase Minute</Button>
-      <Button onClick={start} active>Start/Pause Timer</Button>
+      <Button onClick={changeTime} name="increaseHour" disabled={buttonColour.state === "Pause"}>Increase Hour</Button>
+      <Button onClick={changeTime} name="decreaseHour" disabled={buttonColour.state === "Pause"}>Decrease Hour</Button>
+      <Button onClick={changeTime} name="increaseMinute" disabled={buttonColour.state === "Pause"}>Increase Minute</Button>
+      <Button onClick={changeTime} name="decreaseMinute" disabled={buttonColour.state === "Pause"}>Decrease Minute</Button>
+      <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changeState} active>{buttonColour.state} Timer</Button>
     </div>
   );
 }
