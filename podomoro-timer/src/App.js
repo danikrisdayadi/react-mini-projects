@@ -18,7 +18,9 @@ function App() {
   const [hours, setHours] = useState(initialState.hours)
   const [minutes, setMinutes] = useState(initialState.minutes)
   const [seconds, setSeconds ] = useState(initialState.seconds)
+
   let secTimer;
+
   useEffect(() => {
     if(startTimer) {
       if(seconds > 0){
@@ -70,14 +72,17 @@ function App() {
     setMinutes(initialState.minutes)
     setSeconds(initialState.seconds)
   }
+
   return (
     <div className="App">
       <h1>Podomoro Timer</h1>
-      <h2>{hours} : {minutes} : {seconds}</h2>
+      <h2>{hours < 10 ? "0" : ""}{hours} : {minutes < 10 ? "0" : ""}{minutes} : {seconds < 10 ? "0" : ""}{seconds}</h2>
       <Button onClick={changeTime} name="increaseHour" disabled={buttonColour.state === "Pause"}>Increase Hour</Button>
       <Button onClick={changeTime} name="decreaseHour" disabled={buttonColour.state === "Pause"}>Decrease Hour</Button>
       <Button onClick={changeTime} name="increaseMinute" disabled={buttonColour.state === "Pause"}>Increase Minute</Button>
       <Button onClick={changeTime} name="decreaseMinute" disabled={buttonColour.state === "Pause"}>Decrease Minute</Button>
+      <br />
+      <br />
       <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changeState} active>{buttonColour.state} Timer</Button>
       <Button onClick={resetState} variant="danger" disabled={buttonColour.state === "Pause"}>Reset</Button>
     </div>
