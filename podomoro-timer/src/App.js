@@ -55,14 +55,18 @@ function App() {
           setMinutes(59)
           setHours(hours - 1)
         }, 1000);
-      } else if (seconds === 0 && minutes === 0 && hours === 0 && numberOfRounds > 0) {
+      } else if (seconds === 0 && minutes === 0 && hours === 0) {
         setisCounting(false); // clock has stopped
-        setnumberOfRounds(numberOfRounds - 1);
+        if (activityType === breakState.activityType) {
+          if (numberOfRounds === 0) {
+            sethasFinished(true)
+          } else {
+            setnumberOfRounds(numberOfRounds - 1);
+          }
+          
+        }
         changePlayPause() // Pause the clock
         activityType === studyState.activityType ? resetToBreakState() : resetToStudyState()        
-      } else if (seconds === 0 && minutes === 0 && hours === 0 && numberOfRounds === 0) {
-        console.log("YOU FINISHED")
-        sethasFinished(true)
       }
     }
     
@@ -153,15 +157,12 @@ function App() {
       <Button onClick={changeNumberOfRounds} name="decreaseRounds" disabled={isCounting}>Decrease Rounds</Button>
       <Modal show={hasFinished} onHide={cleanReset}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>You did it!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>Congatulations! You have finished!!!</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={cleanReset}>
             Close
-          </Button>
-          <Button variant="primary" onClick={cleanReset}>
-            Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
