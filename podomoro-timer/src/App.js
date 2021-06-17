@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal'
 import './App.css';
 
 function App() {
-  const initialState = {
-    startTimer: false,
+  const studyState = {
+    activityType: "Study Time",
+    isPlay: false,
     buttonColour: {
       colour: "blue",
       state: "Start"
@@ -12,10 +14,11 @@ function App() {
     hours: 0,
     minutes: 1,
     seconds: 0,
-    isRunning: false
+    isCounting: false
   }
   const breakState = {
-    startTimer: false,
+    activityType: "Break Time",
+    isPlay: false,
     buttonColour: {
       colour: "blue",
       state: "Start"
@@ -23,21 +26,22 @@ function App() {
     hours: 0,
     minutes: 2,
     seconds: 0,
-    isRunning: false
+    isCounting: false
   }
-  const [numberOfRounds, setnumberOfRounds] = useState(0)
-  const [activityType, setactivityType] = useState("Study Time")
-  const [isRunning, setisRunning] = useState(initialState.isRunning)
-  const [startTimer, setStartTimer] = useState(initialState.startTimer)
-  const [buttonColour, setButtonColour] = useState(initialState.buttonColour)
-  const [hours, setHours] = useState(initialState.hours)
-  const [minutes, setMinutes] = useState(initialState.minutes)
-  const [seconds, setSeconds ] = useState(initialState.seconds)
+  const [hasFinished, sethasFinished] = useState(false)
+  const [numberOfRounds, setnumberOfRounds] = useState(1)
+  const [activityType, setactivityType] = useState(studyState.activityType)
+  const [isCounting, setisCounting] = useState(studyState.isCounting)
+  const [isPlay, setisPlay] = useState(studyState.isPlay)
+  const [buttonColour, setButtonColour] = useState(studyState.buttonColour)
+  const [hours, setHours] = useState(studyState.hours)
+  const [minutes, setMinutes] = useState(studyState.minutes)
+  const [seconds, setSeconds ] = useState(studyState.seconds)
 
   let secTimer;
 
   useEffect(() => {
-    if(startTimer) {
+    if(isPlay) {
       if(seconds > 0){
         secTimer = setTimeout(() => setSeconds(seconds - 1), 1000);
       } else if (seconds === 0 && minutes > 0) {
@@ -51,27 +55,19 @@ function App() {
           setMinutes(59)
           setHours(hours - 1)
         }, 1000);
-      } else if (seconds === 0 && minutes === 0 && hours === 0) {
-        setisRunning(false); // clock has stopped
-        if (activityType === "Study Time") {
-          changeState()
-          setisRunning(false)
-          setactivityType("Break Time") 
-          setStartTimer(breakState.startTimer)
-          setSeconds(breakState.seconds)
-          setMinutes(breakState.minutes)
-          setHours(breakState.hours)
-          setButtonColour(breakState.buttonColour)
-        } else {
-          resetState()
-          setactivityType("Study Time") 
-          setnumberOfRounds(numberOfRounds - 1);
-        }
-        
+      } else if (seconds === 0 && minutes === 0 && hours === 0 && numberOfRounds > 0) {
+        setisCounting(false); // clock has stopped
+        setnumberOfRounds(numberOfRounds - 1);
+        changePlayPause() // Pause the clock
+        activityType === studyState.activityType ? resetToBreakState() : resetToStudyState()        
+      } else if (seconds === 0 && minutes === 0 && hours === 0 && numberOfRounds === 0) {
+        console.log("YOU FINISHED")
+        sethasFinished(true)
       }
     }
     
-  }, [startTimer, hours, minutes, seconds])
+  }, [isPlay, hours, minutes, seconds])
+
   const changeTime = (e) => {
     switch(e.target.name) {
       case "increaseMinute":
@@ -90,21 +86,50 @@ function App() {
         break;
     }
   }
-  const changeState = () => {
+
+  const changeNumberOfRounds = (e) => {
+    switch(e.target.name) {
+      case "increaseRounds":
+        setnumberOfRounds(numberOfRounds + 1)
+        break;
+      case "decreaseRounds":
+        numberOfRounds > 0 ? setnumberOfRounds(numberOfRounds - 1) : setnumberOfRounds(0)
+        break;
+      default:
+        break;
+    }
+  }
+
+  const changePlayPause = () => {
     clearTimeout(secTimer);
-    setStartTimer(!startTimer)
-    setisRunning(true)
+    setisPlay(!isPlay)
+    setisCounting(true)
     buttonColour.state === "Start" ? setButtonColour({colour: "red", state: "Pause"}) : setButtonColour({colour: "blue", state: "Start"});
   }
 
-  const resetState = () => {
+  const cleanReset = () => {
+    resetToStudyState()
+    setnumberOfRounds(1)
+    sethasFinished(false)
+  }
+  const resetToStudyState = () => {
     setactivityType("Study Time")
-    setStartTimer(initialState.startTimer)
-    setButtonColour(initialState.buttonColour)
-    setHours(initialState.hours)
-    setMinutes(initialState.minutes)
-    setSeconds(initialState.seconds)
-    setisRunning(initialState.isRunning)
+    setisPlay(studyState.isPlay)
+    setButtonColour(studyState.buttonColour)
+    setHours(studyState.hours)
+    setMinutes(studyState.minutes)
+    setSeconds(studyState.seconds)
+    setisCounting(studyState.isCounting)
+  }
+  
+  const resetToBreakState = () => {
+    setactivityType("Break Time") 
+    setisPlay(breakState.isPlay)
+    setSeconds(breakState.seconds)
+    setMinutes(breakState.minutes)
+    setHours(breakState.hours)
+    setButtonColour(breakState.buttonColour)
+    setisCounting(breakState.isCounting)
   }
 
   return (
@@ -113,14 +138,33 @@ function App() {
       <br />
       <h2>{activityType}</h2>
       <h2>{hours < 10 ? "0" : ""}{hours} : {minutes < 10 ? "0" : ""}{minutes} : {seconds < 10 ? "0" : ""}{seconds}</h2>
-      <Button onClick={changeTime} name="increaseHour" disabled={buttonColour.state === "Pause" || isRunning}>Increase Hour</Button>
-      <Button onClick={changeTime} name="decreaseHour" disabled={buttonColour.state === "Pause" || isRunning}>Decrease Hour</Button>
-      <Button onClick={changeTime} name="increaseMinute" disabled={buttonColour.state === "Pause" || isRunning}>Increase Minute</Button>
-      <Button onClick={changeTime} name="decreaseMinute" disabled={buttonColour.state === "Pause" || isRunning}>Decrease Minute</Button>
+      <Button onClick={changeTime} name="increaseHour" disabled={buttonColour.state === "Pause" || isCounting}>Increase Hour</Button>
+      <Button onClick={changeTime} name="decreaseHour" disabled={buttonColour.state === "Pause" || isCounting}>Decrease Hour</Button>
+      <Button onClick={changeTime} name="increaseMinute" disabled={buttonColour.state === "Pause" || isCounting}>Increase Minute</Button>
+      <Button onClick={changeTime} name="decreaseMinute" disabled={buttonColour.state === "Pause" || isCounting}>Decrease Minute</Button>
       <br />
       <br />
-      <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changeState} active>{buttonColour.state} Timer</Button>
-      <Button onClick={resetState} variant="danger" disabled={buttonColour.state === "Pause"}>Reset</Button>
+      <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changePlayPause} active>{buttonColour.state} Timer</Button>
+      <Button onClick={resetToStudyState} variant="danger" disabled={buttonColour.state === "Pause"}>Reset</Button>
+      <br />
+      <br />
+      <h4>Number of Rounds Left: {numberOfRounds}</h4>
+      <Button onClick={changeNumberOfRounds} name="increaseRounds" disabled={isCounting}>Increase Rounds</Button>
+      <Button onClick={changeNumberOfRounds} name="decreaseRounds" disabled={isCounting}>Decrease Rounds</Button>
+      <Modal show={hasFinished} onHide={cleanReset}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cleanReset}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={cleanReset}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
