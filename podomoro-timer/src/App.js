@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
+import Logo from './assets/logo.png'
 import './App.css';
+
+const BREAK = "Break Time"
+const STUDY = "Study Time"
 
 function App() {
   const studyState = {
-    activityType: "Study Time",
+    activityType: STUDY,
     isPlay: false,
     buttonColour: {
       colour: "blue",
@@ -17,7 +21,7 @@ function App() {
     isCounting: false
   }
   const breakState = {
-    activityType: "Break Time",
+    activityType: BREAK,
     isPlay: false,
     buttonColour: {
       colour: "blue",
@@ -29,7 +33,7 @@ function App() {
     isCounting: false
   }
   const [hasFinished, sethasFinished] = useState(false)
-  const [numberOfRounds, setnumberOfRounds] = useState(0)
+  const [numberOfRounds, setnumberOfRounds] = useState(1)
   const [activityType, setactivityType] = useState(studyState.activityType)
   const [isCounting, setisCounting] = useState(studyState.isCounting)
   const [isPlay, setisPlay] = useState(studyState.isPlay)
@@ -39,7 +43,13 @@ function App() {
   const [seconds, setSeconds ] = useState(studyState.seconds)
 
   let secTimer;
-
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+    } else {
+      Notification.requestPermission();
+    }
+  }, [])
   useEffect(() => {
     if(isPlay) {
       if(seconds > 0){
@@ -56,14 +66,17 @@ function App() {
           setHours(hours - 1)
         }, 1000);
       } else if (seconds === 0 && minutes === 0 && hours === 0) {
-        
         if (activityType === breakState.activityType) {
           if (numberOfRounds === 0) {
             sethasFinished(true)
+            showEndNotification();
             return;
           } else {
             setnumberOfRounds(numberOfRounds - 1);
+            showChangeStateNotification(BREAK);
           }
+        } else {
+          showChangeStateNotification(STUDY);
         }
         // changePlayPause() // Pause the clock
         activityType === studyState.activityType ? resetToBreakState() : resetToStudyState()
@@ -121,7 +134,7 @@ function App() {
     sethasFinished(false)
   }
   const resetToStudyState = () => {
-    setactivityType("Study Time")
+    setactivityType(STUDY)
     setisPlay(studyState.isPlay)
     setButtonColour(studyState.buttonColour)
     setHours(studyState.hours)
@@ -131,7 +144,7 @@ function App() {
   }
   
   const resetToBreakState = () => {
-    setactivityType("Break Time") 
+    setactivityType(BREAK) 
     setisPlay(breakState.isPlay)
     setSeconds(breakState.seconds)
     setMinutes(breakState.minutes)
@@ -140,6 +153,33 @@ function App() {
     setisCounting(breakState.isCounting)
   }
 
+  const showEndNotification = () => {
+    const options = {
+      silent: true,
+      body: 'Congratulations you have finished a session!',
+      icon: Logo
+    }
+    new Notification('Podomoro Session Finished!', options)
+  }
+  
+  const showChangeStateNotification = (state) => {
+    const breakDetails = {
+      silent: true,
+      body: `Time to go back to work!\nRemaining rounds: ${numberOfRounds}`,
+      icon: Logo
+    }
+
+    const studyDetails = {
+      silent: true,
+      body: 'Go and enjoy a well-deserved break',
+      icon: Logo
+    }
+    if (state === BREAK) {
+      new Notification(`Break Time is up!`, breakDetails)
+    } else {
+      new Notification('Study Time Finished!', studyDetails)
+    }
+  }
   return (
     <div className="App">
       <h1>Podomoro Timer</h1>
@@ -160,7 +200,7 @@ function App() {
       <Button onClick={changeNumberOfRounds} name="increaseRounds" disabled={isCounting}>Increase Rounds</Button>
       <Button onClick={changeNumberOfRounds} name="decreaseRounds" disabled={isCounting}>Decrease Rounds</Button>
       <Modal show={hasFinished}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>You did it!</Modal.Title>
         </Modal.Header>
         <Modal.Body>Congatulations! You have finished!!!</Modal.Body>
