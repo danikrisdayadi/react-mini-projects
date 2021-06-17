@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
-import Logo from './assets/logo.png'
+import Logo from './assets/logo.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+
 import './App.css';
 
 const BREAK = "Break Time"
@@ -90,6 +93,10 @@ function App() {
   }, [isPlay, hours, minutes, seconds])
 
   const changeTime = (e) => {
+    console.log(e.target)
+    if (e.target.id === "increaseHour") {
+      hours >= 0 ? setHours(hours + 1) : setHours(0);
+    }
     switch(e.target.name) {
       case "increaseMinute":
         minutes >= 0 ? setMinutes(minutes + 1) : setMinutes(0)
@@ -186,10 +193,11 @@ function App() {
       <br />
       <h2>{activityType}</h2>
       <h2>{hours < 10 ? "0" : ""}{hours} : {minutes < 10 ? "0" : ""}{minutes} : {seconds < 10 ? "0" : ""}{seconds}</h2>
-      <Button onClick={changeTime} name="increaseHour" disabled={buttonColour.state === "Pause" || isCounting}>Increase Hour</Button>
-      <Button onClick={changeTime} name="decreaseHour" disabled={buttonColour.state === "Pause" || isCounting}>Decrease Hour</Button>
-      <Button onClick={changeTime} name="increaseMinute" disabled={buttonColour.state === "Pause" || isCounting}>Increase Minute</Button>
-      <Button onClick={changeTime} name="decreaseMinute" disabled={buttonColour.state === "Pause" || isCounting}>Decrease Minute</Button>
+      
+      <Button onClick={() => hours < 23 ? setHours(hours + 1) : setHours(23)} disabled={buttonColour.state === "Pause" || isCounting}><FontAwesomeIcon icon={faChevronUp}/></Button>
+      <Button onClick={() => hours > 0 ? setHours(hours - 1) : setHours(0)} disabled={buttonColour.state === "Pause" || isCounting}><FontAwesomeIcon icon={faChevronDown}/></Button>
+      <Button onClick={() => minutes < 59 ? setMinutes(minutes + 1) : setMinutes(59)} disabled={buttonColour.state === "Pause" || isCounting}><FontAwesomeIcon icon={faChevronUp} /></Button>
+      <Button onClick={() => minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)} disabled={buttonColour.state === "Pause" || isCounting}><FontAwesomeIcon icon={faChevronDown}/></Button>
       <br />
       <br />
       <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changePlayPause} active>{buttonColour.state} Timer</Button>
