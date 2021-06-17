@@ -29,7 +29,7 @@ function App() {
     isCounting: false
   }
   const [hasFinished, sethasFinished] = useState(false)
-  const [numberOfRounds, setnumberOfRounds] = useState(1)
+  const [numberOfRounds, setnumberOfRounds] = useState(0)
   const [activityType, setactivityType] = useState(studyState.activityType)
   const [isCounting, setisCounting] = useState(studyState.isCounting)
   const [isPlay, setisPlay] = useState(studyState.isPlay)
@@ -56,17 +56,21 @@ function App() {
           setHours(hours - 1)
         }, 1000);
       } else if (seconds === 0 && minutes === 0 && hours === 0) {
-        setisCounting(false); // clock has stopped
+        
         if (activityType === breakState.activityType) {
           if (numberOfRounds === 0) {
             sethasFinished(true)
+            return;
           } else {
             setnumberOfRounds(numberOfRounds - 1);
           }
-          
         }
-        changePlayPause() // Pause the clock
-        activityType === studyState.activityType ? resetToBreakState() : resetToStudyState()        
+        // changePlayPause() // Pause the clock
+        activityType === studyState.activityType ? resetToBreakState() : resetToStudyState()
+        setisCounting(false); // clock has stopped
+        setisPlay(true)
+        setButtonColour({colour: "red", state: "Pause"})
+        setisCounting(true)    
       }
     }
     
@@ -155,7 +159,7 @@ function App() {
       <h4>Number of Rounds Left: {numberOfRounds}</h4>
       <Button onClick={changeNumberOfRounds} name="increaseRounds" disabled={isCounting}>Increase Rounds</Button>
       <Button onClick={changeNumberOfRounds} name="decreaseRounds" disabled={isCounting}>Decrease Rounds</Button>
-      <Modal show={hasFinished} onHide={cleanReset}>
+      <Modal show={hasFinished}>
         <Modal.Header closeButton>
           <Modal.Title>You did it!</Modal.Title>
         </Modal.Header>
