@@ -166,6 +166,8 @@ function App() {
       new Notification('Study Time Finished!', studyDetails)
     }
   }
+
+  const hideButtonCondition = buttonColour.state === "Pause" || isCounting
   return (
     <div className="App">
       <h1>Podomoro Timer</h1>
@@ -174,7 +176,10 @@ function App() {
       <Row className="justify-content-center">
         <Col lg="auto">
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => hours < 23 ? setHours(hours + 1) : setHours(23)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}} 
+                onClick={() => hours < 23 ? setHours(hours + 1) : setHours(23)}>
               <FontAwesomeIcon icon={faChevronUp}/>
             </Button>
           </Row>
@@ -182,7 +187,10 @@ function App() {
             <h2>{hours < 10 ? "0" : ""}{hours}</h2>
           </Row>
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => hours > 0 ? setHours(hours - 1) : setHours(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => hours > 0 ? setHours(hours - 1) : setHours(0)}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
@@ -193,7 +201,10 @@ function App() {
         
         <Col lg="auto">
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => minutes < 59 ? setMinutes(minutes + 1) : setMinutes(59)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => minutes < 59 ? setMinutes(minutes + 1) : setMinutes(59)}>
               <FontAwesomeIcon icon={faChevronUp} />
             </Button>
           </Row>
@@ -201,7 +212,10 @@ function App() {
             <h2>{minutes < 10 ? "0" : ""}{minutes}</h2>
           </Row>
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
@@ -211,7 +225,10 @@ function App() {
         </Col>
         <Col lg="auto">
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => seconds < 59 ? setSeconds(seconds + 1) : setSeconds(59)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => seconds < 59 ? setSeconds(seconds + 1) : setSeconds(59)}>
               <FontAwesomeIcon icon={faChevronUp} />
             </Button>
           </Row>
@@ -219,21 +236,51 @@ function App() {
             <h2>{seconds < 10 ? "0" : ""}{seconds}</h2>
           </Row>
           <Row>
-            <Button className="IncreaseDecreaseButton" onClick={() => seconds > 0 ? setSeconds(seconds - 1) : setSeconds(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button 
+                className="IncreaseDecreaseButton" 
+                style={hideButtonCondition ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => seconds > 0 ? setSeconds(seconds - 1) : setSeconds(0)}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
         </Col>
       </Row>
-      <br />
-      <br />
-      <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changePlayPause} active>{buttonColour.state} Timer</Button>
-      <Button onClick={resetToStudyState} variant="danger" disabled={buttonColour.state === "Pause"}>Reset</Button>
-      <br />
-      <br />
-      <h4>Number of Rounds Left: {numberOfRounds}</h4>
-      <Button onClick={changeNumberOfRounds} name="increaseRounds" disabled={isCounting}>Increase Rounds</Button>
-      <Button onClick={changeNumberOfRounds} name="decreaseRounds" disabled={isCounting}>Decrease Rounds</Button>
+      <Row className="justify-content-center" style={{paddingTop: 20}}>
+        <Col lg="auto">
+          <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changePlayPause} active>{buttonColour.state} Timer</Button>
+        </Col>
+        <Col lg="auto">
+          <Button onClick={resetToStudyState} variant="danger" disabled={buttonColour.state === "Pause"}>Reset</Button>
+        </Col>
+      </Row>
+      <Row className="justify-content-center" style={{marginTop: 40}}>
+        <Col className="align-self-center" lg="auto">
+          <h4>Number of Rounds Left: </h4>
+        </Col>
+        <Col lg="auto">
+          <Row>
+            <Button 
+                className="IncreaseDecreaseButton"
+                style={isCounting ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => numberOfRounds < 99 ? setnumberOfRounds(numberOfRounds + 1) : setnumberOfRounds(99)}>
+              <FontAwesomeIcon icon={faChevronUp} />
+            </ Button>
+          </Row>
+          <Row>
+            <h4>{numberOfRounds}</h4> 
+          </Row>
+          <Row>
+            <Button 
+                className="IncreaseDecreaseButton"
+                style={isCounting ? {visibility: "hidden"} : {visibility: "visible"}}
+                onClick={() => numberOfRounds > 0 ? setnumberOfRounds(numberOfRounds - 1) : setnumberOfRounds(0)}>
+              <FontAwesomeIcon icon={faChevronDown} />
+            </ Button>
+          </Row>
+          
+        </Col>
+      </Row>
+      
       <Modal show={hasFinished}>
         <Modal.Header>
           <Modal.Title>You did it!</Modal.Title>
