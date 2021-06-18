@@ -171,40 +171,47 @@ function App() {
       <h1>Podomoro Timer</h1>
       <br />
       <h2>{activityType}</h2>
-      <Row>
-        <Col>
+      <Row className="justify-content-center">
+        <Col lg="auto">
           <Row>
-            <Button onClick={() => hours < 23 ? setHours(hours + 1) : setHours(23)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => hours < 23 ? setHours(hours + 1) : setHours(23)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronUp}/>
             </Button>
           </Row>
           <Row>
-            <h2>{hours < 10 ? "0" : ""}{hours} :</h2>
+            <h2>{hours < 10 ? "0" : ""}{hours}</h2>
           </Row>
           <Row>
-            <Button onClick={() => hours > 0 ? setHours(hours - 1) : setHours(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => hours > 0 ? setHours(hours - 1) : setHours(0)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
         </Col>
-        <Col>
+        <Col lg="auto" className="align-self-center">
+          <h2> :</h2>
+        </Col>
+        
+        <Col lg="auto">
           <Row>
-            <Button onClick={() => minutes < 59 ? setMinutes(minutes + 1) : setMinutes(59)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => minutes < 59 ? setMinutes(minutes + 1) : setMinutes(59)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronUp} />
             </Button>
           </Row>
           <Row>
-            <h2>{minutes < 10 ? "0" : ""}{minutes} :</h2>
+            <h2>{minutes < 10 ? "0" : ""}{minutes}</h2>
           </Row>
           <Row>
-            <Button onClick={() => minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => minutes > 0 ? setMinutes(minutes - 1) : setMinutes(0)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
         </Col>
-        <Col>
+        <Col lg="auto" className="align-self-center">
+          <h2> :</h2>
+        </Col>
+        <Col lg="auto">
           <Row>
-            <Button onClick={() => seconds < 59 ? setSeconds(seconds + 1) : setSeconds(59)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => seconds < 59 ? setSeconds(seconds + 1) : setSeconds(59)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronUp} />
             </Button>
           </Row>
@@ -212,16 +219,12 @@ function App() {
             <h2>{seconds < 10 ? "0" : ""}{seconds}</h2>
           </Row>
           <Row>
-            <Button onClick={() => seconds > 0 ? setSeconds(seconds - 1) : setSeconds(0)} disabled={buttonColour.state === "Pause" || isCounting}>
+            <Button className="IncreaseDecreaseButton" onClick={() => seconds > 0 ? setSeconds(seconds - 1) : setSeconds(0)} disabled={buttonColour.state === "Pause" || isCounting}>
               <FontAwesomeIcon icon={faChevronDown}/>
             </Button>
           </Row>
         </Col>
       </Row>
-      
-      
-      
-      
       <br />
       <br />
       <Button style={{backgroundColor: buttonColour.colour, borderColor: buttonColour.colour}} onClick={changePlayPause} active>{buttonColour.state} Timer</Button>
