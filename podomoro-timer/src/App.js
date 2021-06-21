@@ -94,19 +94,6 @@ function App() {
     
   }, [isPlay, hours, minutes, seconds])
 
-  const changeNumberOfRounds = (e) => {
-    switch(e.target.name) {
-      case "increaseRounds":
-        setnumberOfRounds(numberOfRounds + 1)
-        break;
-      case "decreaseRounds":
-        numberOfRounds > 0 ? setnumberOfRounds(numberOfRounds - 1) : setnumberOfRounds(0)
-        break;
-      default:
-        break;
-    }
-  }
-
   const changePlayPause = () => {
     clearTimeout(secTimer);
     setisPlay(!isPlay)
