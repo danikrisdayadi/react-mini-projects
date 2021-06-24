@@ -6,8 +6,8 @@ import store from './redux/store'
 
 function App() {
   return (
-    <Provider>
-      <Home store={store}/>
+    <Provider store={store}>
+      <Home />
     </Provider>
   );
 }
