@@ -15,6 +15,13 @@ const addTask = (message) => {
     }
 }
 
+const editTask = (newList) => {
+    return {
+        type: "EDIT",
+        message: newList
+    }
+}
+
 function Home(props) {
     const [task, setTask] = useState(initialTask)
     const handleChange = (e) => {
@@ -23,6 +30,13 @@ function Home(props) {
     const handleSubmit = () => {
         props.submitTask(task)
         setTask(initialTask)
+    }
+    const handleChangeStatus = (e) => {
+        console.log(e.target.id)
+        let newArray = props.messages
+        newArray[e.target.id].status = "complete"
+        console.log(newArray)
+        props.changeTask(newArray)
     }
     return(
         <div>
@@ -42,7 +56,7 @@ function Home(props) {
             </Form>
             <ul>
                 {props.messages.map( (taskItem, index) => {
-                    return(<li key={index}>{taskItem.name}</li>)
+                    return(<li id={index} key={index} onClick={handleChangeStatus} style={taskItem.status === "complete" ? {textDecoration: "line-through"} : null}>{taskItem.name}</li>)
                 })}
             </ul>
         </div>
@@ -53,6 +67,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         submitTask: (task) => {
             dispatch(addTask(task))
+        },
+        changeTask: (task) => {
+            dispatch(editTask(task))
         }
     }
 };
