@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 
 import {Form, Button, Col} from 'react-bootstrap'
+import { connect } from 'react-redux';
 
 const initialTask = {
     name: '',
     status: ''
 }
 
-function Home() {
-    const [taskList, setTaskList] = useState([])
+const addTask = (message) => {
+    return {
+        type: "ADD",
+        message: message
+    }
+}
+
+function Home(props) {
     const [task, setTask] = useState(initialTask)
     const handleChange = (e) => {
         setTask({name: e.target.value, status: "incomplete"})
     }
     const handleSubmit = () => {
-        taskList.push(task)
-        setTaskList(taskList)
+        props.submitTask(task)
         setTask(initialTask)
     }
-
     return(
         <div>
             <h1>Todo List Practise</h1>
@@ -36,13 +41,26 @@ function Home() {
                 </Form.Row>
             </Form>
             <ul>
-                {taskList.map( (taskItem, index) => {
+                {props.messages.map( (taskItem, index) => {
                     return(<li key={index}>{taskItem.name}</li>)
                 })}
             </ul>
         </div>
-        
     )
 }
 
-export default Home;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        submitTask: (task) => {
+            dispatch(addTask(task))
+        }
+    }
+};
+
+const mapStateToProps = (state) => {
+    return {
+        messages: state
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
