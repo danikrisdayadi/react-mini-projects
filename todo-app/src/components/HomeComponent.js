@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {Form, Button, Col} from 'react-bootstrap'
 import { connect } from 'react-redux';
@@ -24,6 +24,12 @@ const editTask = (newList) => {
 
 function Home(props) {
     const [task, setTask] = useState(initialTask)
+    const [messagesList, setmessagesList] = useState(props.messages)
+
+    useEffect(() => {
+        setmessagesList(props.messages)
+    }, [props.messages])
+
     const handleChange = (e) => {
         setTask({name: e.target.value, status: "incomplete"})
     }
@@ -32,12 +38,12 @@ function Home(props) {
         setTask(initialTask)
     }
     const handleChangeStatus = (e) => {
-        console.log(e.target.id)
         let newArray = props.messages
         newArray[e.target.id].status = "complete"
-        console.log(newArray)
         props.changeTask(newArray)
+        setmessagesList(newArray)
     }
+    console.log(messagesList, "messageslist")
     return(
         <div>
             <h1>Todo List Practise</h1>
@@ -55,7 +61,7 @@ function Home(props) {
                 </Form.Row>
             </Form>
             <ul>
-                {props.messages.map( (taskItem, index) => {
+                {messagesList.map( (taskItem, index) => {
                     return(<li id={index} key={index} onClick={handleChangeStatus} style={taskItem.status === "complete" ? {textDecoration: "line-through"} : null}>{taskItem.name}</li>)
                 })}
             </ul>
