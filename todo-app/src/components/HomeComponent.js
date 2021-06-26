@@ -38,12 +38,10 @@ function Home(props) {
         setTask(initialTask)
     }
     const handleChangeStatus = (e) => {
-        let newArray = props.messages
+        let newArray = [...props.messages]
         newArray[e.target.id].status = "complete"
         props.changeTask(newArray)
-        setmessagesList(newArray)
     }
-    console.log(messagesList, "messageslist")
     return(
         <div>
             <h1>Todo List Practise</h1>
